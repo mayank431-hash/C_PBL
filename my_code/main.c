@@ -72,3 +72,94 @@ void displayStudents() {
 
     fclose(fp);
 }
+// Search student by roll
+void searchStudent() {
+    FILE *fp;
+    struct Student s;
+    int roll, found = 0;
+
+    fp = fopen("students.dat", "rb");
+
+    printf("Enter Roll Number to search: ");
+    scanf("%d", &roll);
+
+    while(fread(&s, sizeof(s), 1, fp)) {
+        if(s.roll == roll) {
+            printf("\nRecord Found!\n");
+            printf("Roll: %d\n", s.roll);
+            printf("Name: %s\n", s.name);
+
+            printf("Marks: ");
+            for(int i = 0; i < 5; i++) {
+                printf("%.2f ", s.marks[i]);
+            }
+
+            printf("\nCGPA: %.2f\n", s.cgpa);
+            found = 1;
+            break;
+        }
+    }
+
+    if(!found) {
+        printf("Record not found!\n");
+    }
+
+    fclose(fp);
+}
+
+// Simple login
+int login() {
+    char password[20];
+    char correct[] = "admin123";
+
+    printf("Enter Password: ");
+    scanf("%s", password);
+
+    if(strcmp(password, correct) == 0) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+// Main function
+int main() {
+    int choice;
+
+    printf("==== University Result Management System ====\n");
+
+    if(!login()) {
+        printf("Access Denied!\n");
+        return 0;
+    }
+
+    do {
+        printf("\n\n1. Add Student");
+        printf("\n2. Display All Students");
+        printf("\n3. Search Student");
+        printf("\n4. Exit");
+
+        printf("\nEnter your choice: ");
+        scanf("%d", &choice);
+
+        switch(choice) {
+            case 1:
+                addStudent();
+                break;
+            case 2:
+                displayStudents();
+                break;
+            case 3:
+                searchStudent();
+                break;
+            case 4:
+                printf("Exiting...\n");
+                break;
+            default:
+                printf("Invalid choice!\n");
+        }
+
+    } while(choice != 4);
+
+    return 0;
+}
