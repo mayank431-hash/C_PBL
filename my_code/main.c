@@ -38,3 +38,37 @@ void addStudent() {
     }
 
     s.cgpa = calculateCGPA(s.marks);
+     fwrite(&s, sizeof(s), 1, fp);
+    fclose(fp);
+
+    printf("Student added successfully!\n");
+}
+
+// Display all students
+void displayStudents() {
+    FILE *fp;
+    struct Student s;
+
+    fp = fopen("students.dat", "rb");
+
+    if(fp == NULL) {
+        printf("No records found!\n");
+        return;
+    }
+
+    printf("\n--- Student Records ---\n");
+
+    while(fread(&s, sizeof(s), 1, fp)) {
+        printf("\nRoll: %d", s.roll);
+        printf("\nName: %s", s.name);
+
+        printf("\nMarks: ");
+        for(int i = 0; i < 5; i++) {
+            printf("%.2f ", s.marks[i]);
+        }
+
+        printf("\nCGPA: %.2f\n", s.cgpa);
+    }
+
+    fclose(fp);
+}
